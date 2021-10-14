@@ -1,0 +1,5 @@
+最初的Mobtalker向高版本的移植
+
+逐步推进中
+
+与Mobtalker2无关
