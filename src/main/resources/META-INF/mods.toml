@@ -1,0 +1,14 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="MIT Licence"
+
+[[mods]]
+    modId="mobtalker"
+    version="${file.jarVersion}"
+    displayName="MobTalker"
+    # logoFile="examplemod.png"
+    credits=""
+    authors="SQwatermark"
+    description='''
+    aaa
+    '''
