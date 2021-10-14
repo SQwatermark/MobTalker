@@ -1,6 +1,8 @@
 package moe.sqwatermark.mobtalker.item;
 
 import moe.sqwatermark.mobtalker.client.gui.GuiTalking;
+import moe.sqwatermark.mobtalker.client.session.SessionBase;
+import moe.sqwatermark.mobtalker.client.session.SessionText;
 import moe.sqwatermark.mobtalker.entity.passive.EntityFriendlyMob;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
@@ -30,7 +32,13 @@ public class ItemMobTalker extends Item {
                 target.remove();
             }
         }
-        Minecraft.getInstance().setScreen(new GuiTalking());
+
+        //临时设置
+        SessionText sessionText1 = new SessionText("saaas(playername)$abc$inabwbcwa$inabwbcwa$inabwbcwa$inabwbcwa$abc");
+        SessionText sessionText2 = new SessionText("早上好(playername)$今天天气真好$");
+        sessionText1.setNext(sessionText2);
+
+        Minecraft.getInstance().setScreen(new GuiTalking(sessionText1));
         return super.interactLivingEntity(stack, playerIn, target, hand);
     }
 }

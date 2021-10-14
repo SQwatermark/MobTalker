@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 public class MobTalker
 {
     public static final String MOD_ID = "mobtalker";
-    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
 
     public MobTalker() {
         InitEntities.ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());

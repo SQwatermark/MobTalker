@@ -2,12 +2,14 @@ package moe.sqwatermark.mobtalker.client.gui;
 
 
 public class NameTextSqr {
+
 		private EnumNamePostion postion = EnumNamePostion.LEFT;
 		private String charaName = null;
 		private int textColor = COLOR_DEFAULT;
 		public static final int COLOR_DEFAULT = 0xffffff;
 		public static final int COLOR_MOB = 0x79CDCD;
 		public static final int COLOR_PLAYER = 0x7B68EE;
+
 		/**
 		 * @return the postion
 		 */
