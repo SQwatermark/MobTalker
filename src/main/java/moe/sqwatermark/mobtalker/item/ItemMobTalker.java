@@ -40,7 +40,7 @@ public class ItemMobTalker extends Item {
         SessionText sessionText2 = new SessionText("早上好(playername)$今天天气真好$");
         SessionBase sessionFace = new SessionFace().addCode("#FACE happy");
         SessionBase sessionFace1 = new SessionFace().addCode("#FACE normal");
-        SessionBase sessionCondition = new SessionCondition().addCode("#CONDITION{[歪比巴卜歪比巴卜歪比巴卜歪比巴卜歪比巴卜歪比巴卜歪比巴卜歪比巴卜,Option1A],[月色真美,Option1B],[早上好,Option1C]},[早上好,Option1C]}");
+        SessionBase sessionCondition = new SessionCondition().addCode("#CONDITION {[月色真美,Option1B],[早上好,Option1C]}");
         sessionText1.setNext(sessionFace);
         sessionFace.setNext(sessionText2);
         sessionText2.setNext(sessionFace1);

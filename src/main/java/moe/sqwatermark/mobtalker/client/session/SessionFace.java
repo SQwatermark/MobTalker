@@ -3,6 +3,7 @@ package moe.sqwatermark.mobtalker.client.session;
 import moe.sqwatermark.mobtalker.MobTalker;
 import moe.sqwatermark.mobtalker.client.gui.EnumFaces;
 
+import javax.annotation.Nonnull;
 import java.util.Locale;
 
 /**
@@ -19,6 +20,7 @@ public class SessionFace extends SessionBase {
         // TODO Auto-generated constructor stub
     }
 
+    @Nonnull
     @Override
     public SessionBase addCode(String code) {
         if (!code.contains(FACE_CODE)) return this;

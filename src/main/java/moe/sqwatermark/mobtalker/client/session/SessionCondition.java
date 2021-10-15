@@ -1,12 +1,15 @@
 package moe.sqwatermark.mobtalker.client.session;
 
+import moe.sqwatermark.mobtalker.MobTalker;
 import moe.sqwatermark.mobtalker.client.gui.EnumFaces;
 import net.minecraft.client.Minecraft;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.Vector;
 
 public class SessionCondition extends SessionBase {
@@ -15,7 +18,7 @@ public class SessionCondition extends SessionBase {
     public static String scriptShortCut = null;
     public Vector<SessionBase> options = new Vector<>();
     public Vector<String> optionText = new Vector<>();
-    public SessionBase specHook=null;
+    public SessionBase specHook = null;
     private String motionSourceName;
     private int motionDay = 0;
 
@@ -29,6 +32,7 @@ public class SessionCondition extends SessionBase {
         this.motionDay = dayIndex;
     }
 
+    @Nonnull
     @Override
     public SessionBase addCode(String code) {
         String subCodeLayer1;
@@ -63,12 +67,12 @@ public class SessionCondition extends SessionBase {
 
     private SessionBase getConditionCase(String[] parms) {
         if (parms[parms.length-1].equals("null")) return null;
-        BufferedReader bufferedreader = null;
+        BufferedReader bufferedreader;
         try {
             //TODO 改成读取资源包？
             bufferedreader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(new File(Minecraft.getInstance().gameDirectory,
-                            GatherCondScriptPath(parms))), "UTF-8"));
+                            GatherCondScriptPath(parms))), StandardCharsets.UTF_8));
         } catch (Throwable e) {
             return null;
         }
@@ -94,6 +98,7 @@ public class SessionCondition extends SessionBase {
         }
 
         String result = pathDefault;
+        MobTalker.LOGGER.info(result);
         return result;
     }
 
@@ -133,15 +138,17 @@ public class SessionCondition extends SessionBase {
     }
 
     public void optionToken(int parm) {
-        if (!this.options.isEmpty()){
+        if (!this.options.isEmpty()) {
             if (parm > this.options.size())
                 parm = 0;
             this.next = this.options.get(parm);
         }
-        SessionBase tmp = this.getLast();
+        //TODO 换用更好的处理方式，这个太怪了
+        SessionBase tmp = this.getLast(); // 为什么要在last之后加，直接在选项之后加不好吗？
         tmp.next = specHook;
-        this.updateAllInheritDatas(motionTarget,this.playerName);
+        this.updateAllInheritDatas(motionTarget, this.playerName);
     }
+
     public void setNext(SessionBase parm){
         this.specHook = parm;
     }

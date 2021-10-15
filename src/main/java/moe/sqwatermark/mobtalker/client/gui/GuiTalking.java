@@ -32,6 +32,9 @@ public class GuiTalking extends Screen {
     public static final int CHARA_IMAGE_WIDTH = 230;
     public static final int TEXT_HEIGHT_UNIT = 9;
 
+    private static final int BUTTON_HEIGHT = 20;
+    private static final int BUTTON_DEFAULT_WIDTH = 200;
+
     //protected int textSpeed = mod_Mobtalker.mainOption.getMesgSpeed();
     protected int textSpeed = 1;
 
@@ -47,14 +50,18 @@ public class GuiTalking extends Screen {
     public GuiTalking(SessionBase session) {
         super(new StringTextComponent("Mob Talker"));
         mainScript = session;
-        setCharaImagePath(mainScript.getFacePath() + (face.toString().toLowerCase(Locale.ROOT)) + ".png");
 
-//        do {
+        do {
             this.getScriptContent();
-//            if (mainScript.hasNext() && (mainScript.hasMotion() || mainScript.changeFace())) {
-//                showNextContent();
-//            }
-//        } while (mainScript.hasNext() && (mainScript.hasMotion() || mainScript.changeFace()));
+            if (mainScript.hasNext() && (mainScript.hasMotion() || mainScript.changeFace())) {
+                showNextContent();
+            }
+        } while (mainScript.hasNext() && (mainScript.hasMotion() || mainScript.changeFace()));
+    }
+
+    @Override
+    protected void init() {
+        setCharaImagePath(mainScript.getFacePath() + (face.toString().toLowerCase(Locale.ROOT)) + ".png");
     }
 
     //下一个对话是选项的时候，返回true，并且打开选择GUI
@@ -68,13 +75,13 @@ public class GuiTalking extends Screen {
         return result;
     }
 
-    protected boolean setCharaImagePath(String imagePath) {
+    protected void setCharaImagePath(String imagePath) {
+        MobTalker.LOGGER.info(imagePath);
         if (isValidPath(imagePath)) {
             CharaImagePath = imagePath;
-            return true;
+            return;
         }
         MobTalker.LOGGER.warn("Invalid image path：" + imagePath);
-        return false;
     }
 
     private static boolean isValidPath(String pathIn) {
@@ -91,6 +98,7 @@ public class GuiTalking extends Screen {
             return;
         if (mainScript.changeFace()) {
             face = mainScript.getFace();
+            MobTalker.LOGGER.info(face.toString());
             setCharaImagePath(mainScript.getFacePath() + (face.toString().toLowerCase(Locale.ROOT) + ".png"));
         }
         if (mainScript.hasContent()) {
@@ -113,6 +121,7 @@ public class GuiTalking extends Screen {
         }
         if (mainScript.hasNext()) {
             do {
+                //TODO
                 mainScript = mainScript.getNext();
                 //swaped = (mainScript instanceof SessionCondition);
                 this.getScriptContent();
@@ -205,8 +214,7 @@ public class GuiTalking extends Screen {
                     } else if (mainScript.hasNext()) {
                         showNextContent();
                         this.tick = 0;
-                        if (!mainScript.hasContent()
-                                && !(mainScript instanceof SessionCondition)) {
+                        if (!mainScript.hasContent() && !(mainScript instanceof SessionCondition)) {
                             assert minecraft != null;
                             minecraft.setScreen(null);
                         }

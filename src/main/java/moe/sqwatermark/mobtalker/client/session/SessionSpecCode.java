@@ -2,8 +2,11 @@ package moe.sqwatermark.mobtalker.client.session;
 
 import moe.sqwatermark.mobtalker.client.gui.EnumFaces;
 
+import javax.annotation.Nonnull;
+
 public class SessionSpecCode extends SessionBase {
 
+    @Nonnull
     @Override
     protected SessionBase addCode(String code) {
         return null;

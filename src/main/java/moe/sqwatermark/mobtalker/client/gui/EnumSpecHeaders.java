@@ -22,8 +22,8 @@ public enum EnumSpecHeaders {
 	}
 	public static EnumSpecHeaders getEnumByStr(String digit){
 		EnumSpecHeaders[] tmpBase=EnumSpecHeaders.values();
-		for (int i=0;i<tmpBase.length;i++){
-			if (digit.contains(tmpBase[i].selfStr)) return tmpBase[i];
+		for (EnumSpecHeaders enumSpecHeaders : tmpBase) {
+			if (digit.contains(enumSpecHeaders.selfStr)) return enumSpecHeaders;
 		}
 		return null;
 	}

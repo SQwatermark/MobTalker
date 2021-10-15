@@ -9,6 +9,7 @@ import net.minecraft.util.text.StringTextComponent;
 import java.util.Locale;
 import java.util.Vector;
 
+//TODO 合并这俩GUI
 public class GuiTalkingSelection extends GuiTalking {
 
     private final int BUTTON_HEIGHT = 20;
@@ -21,7 +22,7 @@ public class GuiTalkingSelection extends GuiTalking {
         this.face = facePar;
     }
 
-    public GuiTalkingSelection(SessionBase script,EnumFaces facePar) {
+    public GuiTalkingSelection(SessionBase script, EnumFaces facePar) {
 
         super(script);
         SessionCondition condSession = (SessionCondition)mainScript;
@@ -54,9 +55,10 @@ public class GuiTalkingSelection extends GuiTalking {
                     buttonHeightPos += (diff/2);
             }
             for (int i = 0; i < contSize && i < 3; i++){
+                int tmp = i;
                 this.addButton(new Button(widthPos, buttonHeightPos, buttonWidth, BUTTON_HEIGHT, new StringTextComponent(this.sessionOptions.get(i)), (a) -> {
-                    assert minecraft != null;
-                    minecraft.setScreen(null);
+                    ((SessionCondition)this.mainScript).optionToken(tmp);
+                    testAndSwapGui();
                 }));
                 buttonHeightPos+=diff;
             }
@@ -73,19 +75,13 @@ public class GuiTalkingSelection extends GuiTalking {
         return result;
     }
 
-//    protected void actionPerformed(Button par1GuiButton)
-//    {
-//        ((SessionCondition)this.mainScript).optionToken(par1GuiButton.id-1);
-//        testAndSwapGui();
-//    }
-
     @Override
     protected boolean testAndSwapGui() {
         boolean result = false;
         if (!(mainScript instanceof SessionCondition)) {
             Minecraft Corl = Minecraft.getInstance();
             Corl.setScreen(new GuiTalking(this.mainScript));
-            result=true;
+            result = true;
         }
         return result;
     }

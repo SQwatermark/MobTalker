@@ -7,9 +7,11 @@ import moe.sqwatermark.mobtalker.entity.IFriendAble;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.SlimeEntity;
 
+import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.IOException;
 
+//TODO 把脚本逻辑改成索引表，链式的太混乱了
 public abstract class SessionBase {
 
     public final static int MAX_SHOWN_LINES = 4;
@@ -60,7 +62,7 @@ public abstract class SessionBase {
 
     protected static SessionBase LoadScript(BufferedReader script,
                                             String sourceName, int dayIndex) {
-        SessionBase result = null;
+        SessionBase result;
         String codeTmp;
         try {
             codeTmp = script.readLine();
@@ -104,6 +106,7 @@ public abstract class SessionBase {
         return tmp;
     }
 
+    @Nonnull
     protected abstract SessionBase addCode(String code);
 
     public abstract boolean hasContent();
@@ -129,5 +132,40 @@ public abstract class SessionBase {
     public void setNext(SessionBase parm) {
         this.next = parm;
     }
+
+//    public static void preLoading() {
+//        System.out.println("Start Preloading");
+//        // if (!preLoad)
+//        // return;
+//        File scriptLoc = new File(Minecraft.getMinecraftDir(),
+//                "/resources/mobTalker_script");
+//        if (!scriptLoc.exists()) {
+//            System.out.println(scriptLoc.getAbsolutePath() + " not found.");
+//            return;
+//        }
+//
+//        File tmpSubDir;
+//        Vector<String> resultTmp = new Vector();
+//        String[] subDirTmp = scriptLoc.list();
+//        for (int i = 0; i < subDirTmp.length; i++) {
+//            tmpSubDir = new File(scriptLoc, subDirTmp[i]);
+//            if (tmpSubDir.isDirectory())
+//                resultTmp.add(subDirTmp[i]);
+//        }
+//        supportedEntityNames = new String[resultTmp.size()];
+//        for (int i = 0; i < supportedEntityNames.length; i++) {
+//            supportedEntityNames[i] = new String(resultTmp.get(i));
+//            sourceName = supportedEntityNames[i];
+//            dataBase.put(sourceName, getSessionFromStatic());
+//        }
+//        try {
+//            loadingFriendly = true;
+//            preLoadFriendly();
+//            loadingFriendly = false;
+//        } catch (IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//    }
 
 }
