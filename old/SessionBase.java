@@ -31,7 +31,7 @@ public abstract class SessionBase {
 
 	/**
 	 * 
-	 * ±qEntity«Ø¥ß¤@­ÓbufferedReaderµM«áÂà¤Æ¦¨session¶°
+	 * ï¿½qEntityï¿½Ø¥ß¤@ï¿½ï¿½bufferedReaderï¿½Mï¿½ï¿½ï¿½ï¿½Æ¦ï¿½sessionï¿½ï¿½
 	 * 
 	 * @return
 	 */
@@ -206,7 +206,7 @@ public abstract class SessionBase {
 	}
 
 	/**
-	 * ±qBufferedReaderÅª¨úcode¨Ã¥B¶ñ¤W¬Û¹ïÀ³ªº¤lSession
+	 * ï¿½qBufferedReaderÅªï¿½ï¿½codeï¿½Ã¥Bï¿½ï¿½Wï¿½Û¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½lSession
 	 * 
 	 * @param script
 	 * @param sourceName
@@ -344,6 +344,7 @@ public abstract class SessionBase {
 
 	public SessionBase getLast() {
 		SessionBase tmp = this;
+		//å½“å¿ƒå¾ªç¯ï¼
 		while (tmp.hasNext())
 			tmp = tmp.next;
 		return tmp;

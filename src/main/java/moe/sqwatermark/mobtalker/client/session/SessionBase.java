@@ -1,10 +1,14 @@
 package moe.sqwatermark.mobtalker.client.session;
 
 import moe.sqwatermark.mobtalker.client.gui.EnumFaces;
+import moe.sqwatermark.mobtalker.client.gui.EnumSpecHeaders;
 import moe.sqwatermark.mobtalker.client.gui.NameTextSqr;
 import moe.sqwatermark.mobtalker.entity.IFriendAble;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.monster.SlimeEntity;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 
 public abstract class SessionBase {
 
@@ -18,6 +22,16 @@ public abstract class SessionBase {
     protected LivingEntity motionTarget = null;
 
     public static NameTextSqr nameSqr = new NameTextSqr().setCharaName("库帕");
+
+    public static boolean loadingFriendly = false;
+
+    public SessionBase() {
+
+    }
+
+    public SessionBase(LivingEntity motionTar) {
+        this.motionTarget = motionTar;
+    }
 
     // 获取此对话的角色外观文件夹的路径
     public String getFacePath() {
@@ -38,6 +52,59 @@ public abstract class SessionBase {
         }
         return result.toString();
     }
+
+    protected static SessionBase LoadScript(BufferedReader script,
+                                            String sourceName) {
+        return LoadScript(script, sourceName, 0);
+    }
+
+    protected static SessionBase LoadScript(BufferedReader script,
+                                            String sourceName, int dayIndex) {
+        SessionBase result = null;
+        String codeTmp;
+        try {
+            codeTmp = script.readLine();
+        } catch (IOException e) {
+            return null;
+        }
+        if (codeTmp == null || codeTmp.equals("#END")) {
+            try {
+                script.close();
+            } catch (IOException e) {
+            }
+            return null;
+        }
+
+        if (codeTmp.contains("#FACE"))
+            result = new SessionFace();
+        else if (EnumSpecHeaders.getEnumByStr(codeTmp) != null)
+            result = new SessionSpecCode();
+        else if (codeTmp.contains(SessionCondition.HEADER))
+            result = new SessionCondition(sourceName, dayIndex);
+        else
+            result = new SessionText();
+        result = result.addCode(codeTmp);
+        result.setNext(LoadScript(script, sourceName, dayIndex));
+        return result;
+    }
+
+    public void updateAllInheritDatas(LivingEntity motionTar, String playerNamePar) {
+        SessionBase Loc = this;
+        while (Loc != null) {
+            Loc.motionTarget = motionTar;
+            Loc.playerName = playerNamePar;
+            Loc = Loc.next;
+        }
+    }
+
+    public SessionBase getLast() {
+        SessionBase tmp = this;
+        while (tmp.hasNext())
+            tmp = tmp.next;
+        return tmp;
+    }
+
+    protected abstract SessionBase addCode(String code);
 
     public abstract boolean hasContent();
 

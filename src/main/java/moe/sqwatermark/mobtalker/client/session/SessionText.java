@@ -4,8 +4,8 @@ import moe.sqwatermark.mobtalker.client.gui.EnumFaces;
 
 public class SessionText extends SessionBase {
 
-    private static String PLAYNAME_REPLACE_CODE="(playername)";
-    private final int TALKING_SQR_WIDTH=280;
+    private static String PLAYNAME_REPLACE_CODE = "(playername)";
+    private final int TALKING_SQR_WIDTH = 280;
     private String[] content;
     protected SessionBase next = null;
 
@@ -23,7 +23,7 @@ public class SessionText extends SessionBase {
         if (this.content == null || this.content.length <= 0) return;
         for (int i = 0;i < content.length; i++) {
             if (this.content[i].contains(PLAYNAME_REPLACE_CODE)){
-                this.content[i]=this.content[i].replaceAll(PLAYNAME_REPLACE_CODE, this.playerName).replace("(", "").replace(")", "");
+                this.content[i] = this.content[i].replaceAll(PLAYNAME_REPLACE_CODE, this.playerName).replace("(", "").replace(")", "");
             }
         }
     }
@@ -32,6 +32,11 @@ public class SessionText extends SessionBase {
     public String[] getContent() {
         //replacePlayerName();
         return this.content;
+    }
+
+    @Override
+    protected SessionBase addCode(String code) {
+        return null;
     }
 
     @Override

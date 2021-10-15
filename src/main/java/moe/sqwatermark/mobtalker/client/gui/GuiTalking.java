@@ -13,6 +13,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.StringTextComponent;
 
 import java.util.Locale;
+import java.util.Vector;
 
 public class GuiTalking extends Screen {
 
@@ -21,7 +22,9 @@ public class GuiTalking extends Screen {
     protected String[] Mesg;
     protected SessionBase mainScript;
     protected EnumFaces face = EnumFaces.NORMAL;
-    protected String CharaImagePath;
+
+    // 不要直接对其赋值！用setCharaImagePath()
+    private String CharaImagePath;
 
     public static final int DIALOG_BOX_WIDTH = 300;
     public static final int DIALOG_BOX_HEIGHT = 60;
@@ -37,19 +40,21 @@ public class GuiTalking extends Screen {
     protected int msgCompletedIndex = -1;
 
     protected static boolean isHidden = false;
+
+    protected Vector<String> sessionOptions = null;
     protected boolean waitingForOption = false;
 
     public GuiTalking(SessionBase session) {
         super(new StringTextComponent("Mob Talker"));
         mainScript = session;
-        CharaImagePath = mainScript.getFacePath() + (face.toString().toLowerCase(Locale.ROOT)) + ".png";
+        setCharaImagePath(mainScript.getFacePath() + (face.toString().toLowerCase(Locale.ROOT)) + ".png");
 
-        do {
+//        do {
             this.getScriptContent();
-            if (mainScript.hasNext() && (mainScript.hasMotion() || mainScript.changeFace())) {
-                showNextContent();
-            }
-        } while (mainScript.hasNext() && (mainScript.hasMotion() || mainScript.changeFace()));
+//            if (mainScript.hasNext() && (mainScript.hasMotion() || mainScript.changeFace())) {
+//                showNextContent();
+//            }
+//        } while (mainScript.hasNext() && (mainScript.hasMotion() || mainScript.changeFace()));
     }
 
     //下一个对话是选项的时候，返回true，并且打开选择GUI
@@ -63,12 +68,30 @@ public class GuiTalking extends Screen {
         return result;
     }
 
+    protected boolean setCharaImagePath(String imagePath) {
+        if (isValidPath(imagePath)) {
+            CharaImagePath = imagePath;
+            return true;
+        }
+        MobTalker.LOGGER.warn("Invalid image path：" + imagePath);
+        return false;
+    }
+
+    private static boolean isValidPath(String pathIn) {
+        for(int i = 0; i < pathIn.length(); ++i) {
+            if (!ResourceLocation.validPathChar(pathIn.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     protected void getScriptContent() {
         if (testAndSwapGui())
             return;
         if (mainScript.changeFace()) {
             face = mainScript.getFace();
-            CharaImagePath = mainScript.getFacePath() + (face.toString()) + ".png";
+            setCharaImagePath(mainScript.getFacePath() + (face.toString().toLowerCase(Locale.ROOT) + ".png"));
         }
         if (mainScript.hasContent()) {
             //textSpeed = mod_Mobtalker.mainOption.getMesgSpeed();
@@ -198,8 +221,9 @@ public class GuiTalking extends Screen {
 
     protected void renderCharacter(MatrixStack matrixStack) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+        ResourceLocation location = new ResourceLocation(MobTalker.MOD_ID, CharaImagePath);
         assert this.minecraft != null;
-        this.minecraft.getTextureManager().bind(new ResourceLocation(MobTalker.MOD_ID, CharaImagePath));
+        this.minecraft.getTextureManager().bind(location);
         int i = (width - CHARA_IMAGE_WIDTH) / 2;
         int j = height - (int)(CHARA_IMAGE_HEIGHT * 0.8);
         blit(matrixStack, i, j, 0, 0, CHARA_IMAGE_WIDTH, CHARA_IMAGE_HEIGHT, CHARA_IMAGE_WIDTH, CHARA_IMAGE_HEIGHT);
